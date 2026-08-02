@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { siteConfig } from '../config';
+
+const posts = (await getCollection('blog'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+<BaseLayout title={siteConfig.title} description={siteConfig.description}>
+  <section class="hero">
+    <h1>你好，我是 {siteConfig.author}</h1>
+    <p>{siteConfig.description}</p>
+  </section>
+  <section>
+    <h2 class="section-title">全部文章</h2>
+    <div class="post-list">
+      {posts.map((post) => <PostCard post={post} />)}
+    </div>
+    {posts.length === 0 && <p class="comments-hint">还没有文章，快写一篇吧。</p>}
+  </section>
+</BaseLayout>

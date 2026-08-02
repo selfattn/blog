@@ -1,0 +1,61 @@
+---
+---
+<button
+  class="theme-toggle"
+  id="theme-toggle"
+  type="button"
+  aria-label="切换明暗主题"
+  title="切换明暗主题"
+>
+  <svg
+    class="icon-sun"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="4"></circle>
+    <path
+      d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"
+    ></path>
+  </svg>
+  <svg
+    class="icon-moon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+</button>
+<script>
+  const btn = document.getElementById('theme-toggle');
+  const giscusFrame = () =>
+    document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+
+  btn?.addEventListener('click', () => {
+    const root = document.documentElement;
+    root.classList.toggle('dark');
+    const dark = root.classList.contains('dark');
+    try {
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+    } catch {
+      /* 无痕模式下忽略 */
+    }
+    // 让 Giscus 评论区跟随主题切换
+    const frame = giscusFrame();
+    if (frame) {
+      frame.contentWindow?.postMessage(
+        { giscus: { setConfig: { theme: dark ? 'dark' : 'light' } } },
+        'https://giscus.app',
+      );
+    }
+  });
+</script>

@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config';
+---
+<BaseLayout title="关于" description={`关于 ${siteConfig.author}`}>
+  <div class="about">
+    <h1>关于</h1>
+    <div class="prose">
+      <p>你好，我是 {siteConfig.author}。这里是「{siteConfig.title}」。</p>
+      <p>
+        这个博客使用 <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>{' '}
+        构建，文章用 Markdown 编写，构建后是完全静态的页面，加载速度快、无需服务器。
+      </p>
+      <p>在这里写你自己的介绍吧 —— 直接编辑 <code>src/pages/about.astro</code>。</p>
+    </div>
+  </div>
+</BaseLayout>

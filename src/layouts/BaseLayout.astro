@@ -1,0 +1,61 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { siteConfig } from '../config';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = siteConfig.description } = Astro.props;
+const pageTitle = title === siteConfig.title ? siteConfig.title : `${title} · ${siteConfig.title}`;
+const base = import.meta.env.BASE_URL;
+---
+<!doctype html>
+<html lang={siteConfig.lang} class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <link rel="icon" href={`${base}favicon.ico`} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteConfig.title} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="alternate" type="application/rss+xml" title={siteConfig.title} href={`${base}rss.xml`} />
+    <script is:inline>
+      // 在首帧绘制前确定主题，避免闪烁（默认深色）
+      (function () {
+        var stored = null;
+        try {
+          stored = localStorage.getItem('theme');
+        } catch (e) {
+          /* 忽略 */
+        }
+        var dark = stored ? stored === 'dark' : true;
+        var root = document.documentElement;
+        if (dark) {
+          root.classList.add('dark');
+        } else {
+          root.classList.remove('dark');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="layout">
+      <Header />
+      <main class="main">
+        <div class="container">
+          <slot />
+        </div>
+      </main>
+      <Footer />
+    </div>
+  </body>
+</html>
