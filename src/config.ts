@@ -1,7 +1,7 @@
 export const siteConfig = {
   title: '我的博客',
   description: '用 Astro 搭建的个人博客，记录技术学习与生活点滴。',
-  author: '你的名字',
+  author: 'zhangjiancheng',
   lang: 'zh-CN',
   // Giscus 评论配置：需要自己填写，步骤见 README 的「开启评论区」
   giscus: {
