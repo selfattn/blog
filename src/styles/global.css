@@ -503,6 +503,18 @@ html.dark .icon-moon {
   color: inherit;
 }
 
+/* ============ KaTeX 公式 ============ */
+.prose .katex {
+  font-size: 1.05em;
+}
+
+.prose .katex-display {
+  margin: 1.2em 0;
+  padding: 0.25em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
 /* ============ 响应式 ============ */
 @media (max-width: 640px) {
   .main {
