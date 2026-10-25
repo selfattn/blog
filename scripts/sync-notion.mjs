@@ -698,8 +698,18 @@ async function main() {
       console.warn(`  ! ${post.meta.title}：内容过长，Notion 只返回了部分正文`);
     }
 
+    if (!markdown) {
+      console.warn(`  ! ${post.meta.title}：正文为空，跳过（Notion 里可能还没写内容）`);
+      continue;
+    }
+
     prepared.push({ ...post, markdown });
     await sleep(250); // 控制在 3 req/s 以下
+  }
+
+  if (prepared.length === 0) {
+    console.log('  没有可写入的文章，保留现有内容。');
+    return;
   }
 
   await clearGenerated();
