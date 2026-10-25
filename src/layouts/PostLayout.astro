@@ -29,6 +29,8 @@ const showLede = Boolean(description) && !post.data.notionId;
         <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
         <span class="dot"></span>
         <span>{readingTime(post.body)}</span>
+        <span class="dot"></span>
+        <span class="page-views">阅读 <span id="vercount_value_page_pv">–</span></span>
       </div>
       <h1>{title}</h1>
       {showLede && <p class="post-lede">{description}</p>}

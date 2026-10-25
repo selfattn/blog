@@ -6,7 +6,14 @@ const year = new Date().getFullYear();
 ---
 <footer class="site-footer">
   <div class="container">
-    <p>© {year} {siteConfig.author}</p>
+    <div class="footer-left">
+      <p>© {year} {siteConfig.author}</p>
+      <p class="site-stats">
+        <span>本站访问 <span id="vercount_value_site_pv">–</span> 次</span>
+        <span class="dot" aria-hidden="true"></span>
+        <span>访客 <span id="vercount_value_site_uv">–</span> 人</span>
+      </p>
+    </div>
     <p class="footer-links">
       <a href={`${base}rss.xml`}>RSS</a>
       <span class="dot" aria-hidden="true"></span>

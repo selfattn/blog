@@ -959,6 +959,30 @@ a.tag:hover {
   margin: 0;
 }
 
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.site-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.site-stats span span {
+  color: var(--text);
+}
+
+.page-views {
+  font-variant-numeric: tabular-nums;
+}
+
 .footer-links {
   display: flex;
   align-items: center;
@@ -975,7 +999,8 @@ a.tag:hover {
   text-decoration: none;
 }
 
-.footer-links .dot {
+.footer-links .dot,
+.site-stats .dot {
   width: 3px;
   height: 3px;
   border-radius: 999px;
