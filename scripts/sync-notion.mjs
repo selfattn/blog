@@ -322,8 +322,11 @@ function normalizeMarkdown(markdown) {
     (_, label) => `**${label.trim()}**`,
   );
 
-  // Notion 的行内公式是 $`x`$，转成标准 $x$
-  output = output.replace(/\$`([^`\n]+)`\$/g, (_, expression) => `$${expression}$`);
+  // Notion 的行内公式是 $`x`$，可能跨行；转成单行标准 $x$
+  output = output.replace(
+    /\$`([\s\S]*?)`\$/g,
+    (_, expression) => `$${expression.replace(/\s*\n\s*/g, ' ').trim()}$`,
+  );
 
   // 颜色标记会漏成正文，直接去掉；span 只是包裹，保留内容
   output = output
