@@ -36,7 +36,7 @@ draft: false
 如果你习惯在 Notion 里写作，可以让博客直接读 Notion 的页面树，不用手动导出：
 
 1. 按 [NOTION.md](./NOTION.md) 创建 integration、把 **RL 页面**授权给它、在 `.env` 里填 token 和 `NOTION_ROOT_PAGE_ID`；
-2. 在 RL 下面新建一级子页面就是一篇新文章；本地跑 `npm run sync` 会写进 `src/content/notion/`；
+2. 在 RL 下面新建子页面（任意层级）就是一篇新文章；本地跑 `npm run sync` 会写进 `src/content/notion/`；
 3. 配好 GitHub 的两个 secret 后，Actions 每小时自动同步并部署，也可以在 `Actions` 里手动 `Run workflow` 立即发布。
 
 Notion 的图片会在同步时下载到本地，不依赖它一小时就过期的临时链接。标题和现有手写文章一致时，Notion 版本会覆盖手写版本并沿用原 URL。手写 Markdown 和 Notion 文章可以混用，首页、RSS、sitemap 会一起收录。

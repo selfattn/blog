@@ -76,14 +76,14 @@ npm run dev              # 打开 http://localhost:4321/blog/
 
 ## 写作规则
 
-**在 RL 下面新建一个一级子页面，就是新文章。**
+**在 RL 下面新建一个子页面，就是新文章；子页面下面再套子页面，也会递归同步成独立文章。**
 
 | Notion 里的东西 | 博客里的结果 |
 | --- | --- |
-| RL 下的一级子页面 | 一篇文章，标题就是页面标题 |
+| RL 下的子页面（任意层级） | 一篇文章，标题就是页面标题 |
 | 子页面里的正文 | 文章正文 |
 | 子页面里的图片 | 下载到 `public/notion/`，不依赖 Notion 临时链接 |
-| 子页面下再嵌套的页面 | **不单独发布**，在正文里显示为加粗标题 |
+| 子页面下再嵌套的页面 | 也单独成文，递归同步 |
 | RL 页面本身的段落文字 | 忽略 |
 
 细节：
@@ -105,7 +105,7 @@ npm run dev              # 打开 http://localhost:4321/blog/
 - **自动**：GitHub Actions 每小时的第 17 分钟跑一次（`cron: '17 * * * *'`），最多等一小时。
 - **立即**：仓库 `Actions` → `Deploy to GitHub Pages` → `Run workflow`。
 - 删除文章：删掉 Notion 子页面，或把它挪出 RL；下一次同步会整体重建 `src/content/notion/`，旧文章不会残留。
-- 移动文章：把它拖到 RL 下一级即可；嵌套在别的子页面下不会被发布。
+- 移动文章：把它拖到 RL 下面即可，任意层级都会被发布。
 
 ---
 
@@ -149,7 +149,7 @@ Notion 的 Markdown 导出不是无损的，下面这些块会被降级：
 | 高亮块 `callout` | 转成引用块，保留 emoji |
 | 折叠块 `toggle` | 展开成「加粗标题 + 正文」，嵌套折叠可能异常 |
 | 分栏 `columns` | 变成上下顺序排列 |
-| 嵌套子页面 | 只显示加粗标题，不发布内容 |
+| 嵌套子页面 | 递归同步，每篇单独成文 |
 | PDF / 文件附件 | 只保留「PDF：xxx」文字，不下载文件 |
 | 嵌入网页 / 视频 / 数据库视图 | 变成「（嵌入内容）」或纯文字 |
 | 书签 `bookmark` | 转成普通链接 |
@@ -170,7 +170,7 @@ token 复制错了，或 integration 被删了。重新生成，更新 `.env` �
 
 **新页面没出现**
 
-确认它挂在 RL 的**一级**下面，而不是某个子页面里面；再确认同步跑过（Actions 或本地 `npm run sync`）。
+确认它挂在 RL 下面（任意层级都可以）；再确认同步跑过（Actions 或本地 `npm run sync`）。
 
 **文章重复了**
 
@@ -191,7 +191,7 @@ Notion 的 Markdown 导出对部分块会降级，见上面的「已知限制」
 `scripts/sync-notion.mjs`，零依赖，只用 Node 内置的 `fetch`：
 
 1. 读 `.env`，拿 token 和 RL 页面 ID；
-2. `GET /v1/blocks/{RL}/children` 取一级子页面；
+2. `GET /v1/blocks/{RL}/children` 递归取 RL 下的所有子页面；
 3. `GET /v1/pages/{id}/markdown` 取正文；
 4. 规范化 Notion 的 Markdown：展开同步块 / callout / 折叠块 / 分栏，转换行内公式，清掉会过期的附件地址；
 5. 下载图片到 `public/notion/`，替换链接；

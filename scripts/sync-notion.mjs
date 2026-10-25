@@ -41,6 +41,8 @@ let TOKEN = '';
 let BASE = '/';
 let API_BASE = DEFAULT_API_BASE;
 let EXCLUDE_SLUGS = new Set();
+// Notion 页面 ID -> 博客 slug，用来把父页面里的 <page> 引用变成站内链接
+let PAGE_SLUGS = new Map();
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -253,6 +255,35 @@ function dedent(text) {
     .join('\n');
 }
 
+/** 把数学公式里的中文、全角括号、占位符规范化，避免 KaTeX 排版错乱。 */
+function sanitizeMathSegment(segment) {
+  return segment.replace(/\$\$([\s\S]*?)\$\$|\$([^$\n]+)\$/g, (match, display, inline) => {
+    const expression = display ?? inline;
+    if (!expression) return match;
+
+    let fixed = expression
+      .replace(/（/g, '(')
+      .replace(/）/g, ')')
+      .replace(/\[\s*~~\s*\]/g, '[\\cdots]');
+
+    // 中文必须放进 \text{}，否则会按数学字体排，字号和基线都会怪
+    fixed = fixed.replace(
+      /(\\text\{[^{}]*\})|([\u3400-\u9fff][\u3400-\u9fff\sA-Za-z0-9]*)/g,
+      (_, textGroup, cjk) => textGroup || `\\text{${cjk.trim()}}`,
+    );
+
+    return display !== undefined ? `$$${fixed}$$` : `$${fixed}$`;
+  });
+}
+
+function sanitizeMath(text) {
+  // 代码块里的 $ 不动
+  return text
+    .split(/(```[\s\S]*?```)/g)
+    .map((part, index) => (index % 2 === 1 ? part : sanitizeMathSegment(part)))
+    .join('');
+}
+
 /** 在 HTML 块和紧随其后的 Markdown 之间补空行，否则 Markdown 会被当成 HTML 文本。 */
 function separateBlocks(text) {
   const lines = text.split('\n');
@@ -316,10 +347,15 @@ function normalizeMarkdown(markdown) {
     },
   );
 
-  // 子页面链接：正文里只是引用，转成加粗标题，避免链回 Notion 私有页面
+  // 子页面链接：能对上已同步文章就链过去，否则退化成加粗标题
   output = output.replace(
-    /<page\b[^>]*>([\s\S]*?)<\/page>/g,
-    (_, label) => `**${label.trim()}**`,
+    /<page\b[^>]*\burl="([^"]+)"[^>]*>([\s\S]*?)<\/page>/g,
+    (_, url, label) => {
+      const id = /\/p\/([0-9a-f-]{32,36})/i.exec(url)?.[1]?.replace(/-/g, '');
+      const slug = id ? PAGE_SLUGS.get(id) : undefined;
+      const text = label.trim();
+      return slug ? `[${text}](${BASE}${slug}/)` : `**${text}**`;
+    },
   );
 
   // Notion 的行内公式是 $`x`$，可能跨行；转成单行标准 $x$
@@ -345,6 +381,8 @@ function normalizeMarkdown(markdown) {
     )
     .replace(/<embed\b[^>]*\/?>/g, '（嵌入内容）')
     .replace(/<span\s+color="[^"]*">/g, '<span>');
+
+  output = sanitizeMath(output);
 
   return separateBlocks(output).trim();
 }
@@ -524,8 +562,10 @@ async function readExistingPosts() {
   return posts;
 }
 
-/** 取页面树里的一级子页面，按 Notion 里的顺序返回。 */
-async function getChildPages(rootPageId) {
+/** 递归取页面树里的子页面，按 Notion 里的顺序返回。 */
+async function getChildPages(rootPageId, depth = 0) {
+  if (depth > 5) return [];
+
   const children = [];
   let cursor;
 
@@ -536,12 +576,18 @@ async function getChildPages(rootPageId) {
     const data = await notion(`/blocks/${rootPageId}/children?${query}`);
     for (const block of data.results || []) {
       if (block.type !== 'child_page') continue;
+
+      const title = (block.child_page?.title || '').trim();
       children.push({
         id: block.id,
-        title: (block.child_page?.title || '').trim(),
+        title,
         createdAt: block.created_time,
         updatedAt: block.last_edited_time,
+        depth,
       });
+
+      const nested = await getChildPages(block.id, depth + 1);
+      children.push(...nested);
     }
 
     cursor = data.has_more ? data.next_cursor : undefined;
@@ -607,15 +653,16 @@ async function main() {
 
   if (treeMode) {
     const entries = await getChildPages(rootPageId);
-    console.log(`  读取 ${entries.length} 个顶层子页面`);
+    console.log(`  读取 ${entries.length} 个页面（含嵌套子页面）`);
 
     if (LIST_ONLY) {
-      console.log('\n所有子页面：');
+      console.log('\n所有页面：');
       for (const entry of entries) {
         const meta = treeMetadata(entry, existingPosts);
         if (!meta) continue;
+        const indent = '  '.repeat(entry.depth);
         console.log(
-          `  [${meta.matchedExisting ? '覆盖' : '新增'}] ${meta.title}  slug=${meta.slug}  id=${entry.id}`,
+          `  ${indent}[${meta.matchedExisting ? '覆盖' : '新增'}] ${meta.title}  slug=${meta.slug}  id=${entry.id}`,
         );
       }
       console.log('\n只列清单，未写入任何文件。');
@@ -630,8 +677,12 @@ async function main() {
         continue;
       }
       posts.push({ page: { id: entry.id }, meta });
-      console.log(`  ${meta.matchedExisting ? '↺ 覆盖' : '+'} ${meta.title}`);
+      const indent = '  '.repeat(entry.depth);
+      const marker = entry.depth > 0 ? '↳' : meta.matchedExisting ? '↺ 覆盖' : '+';
+      console.log(`  ${indent}${marker} ${meta.title}`);
     }
+
+    PAGE_SLUGS = new Map(posts.map(({ meta }) => [meta.id.replace(/-/g, ''), meta.slug]));
   } else {
     const target = await resolveDatabase(databaseId);
     if (target.dataSourceId) console.log(`  数据源：${target.dataSourceId}`);

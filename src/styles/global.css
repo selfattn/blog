@@ -813,6 +813,11 @@ html.dark .icon-moon {
   font-size: 1.04em;
 }
 
+/* 公式里的中文用正文字体，避免 KaTeX 字体缺字或基线错位 */
+.prose .katex .mord.text {
+  font-family: var(--font-sans);
+}
+
 .prose .katex-display {
   margin: 1.5em 0;
   padding: 0.3em 0;
