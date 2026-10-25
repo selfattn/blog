@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # 每小时同步一次 Notion，写完后最多等一小时自动上线
+  schedule:
+    - cron: '17 * * * *'
 
 permissions:
   contents: read
@@ -27,6 +30,18 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
+      # 没配置 secrets 时跳过，站点仍然用仓库里的手写文章正常构建
+      - name: Sync Notion posts
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          NOTION_ROOT_PAGE_ID: ${{ secrets.NOTION_ROOT_PAGE_ID }}
+        run: |
+          if [ -z "$NOTION_TOKEN" ] || { [ -z "$NOTION_DATABASE_ID" ] && [ -z "$NOTION_ROOT_PAGE_ID" ]; }; then
+            echo "::notice::未配置 NOTION_TOKEN / NOTION_ROOT_PAGE_ID，跳过 Notion 同步"
+            exit 0
+          fi
+          npm run sync
       - name: Build with Astro
         run: npm run build
       - name: Setup Pages

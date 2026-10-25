@@ -31,6 +31,16 @@ draft: false
 - `pubDate` 决定列表排序，写当天日期即可
 - 代码块会自动语法高亮
 
+## 用 Notion 写文章（可选）
+
+如果你习惯在 Notion 里写作，可以让博客直接读 Notion 的页面树，不用手动导出：
+
+1. 按 [NOTION.md](./NOTION.md) 创建 integration、把 **RL 页面**授权给它、在 `.env` 里填 token 和 `NOTION_ROOT_PAGE_ID`；
+2. 在 RL 下面新建一级子页面就是一篇新文章；本地跑 `npm run sync` 会写进 `src/content/notion/`；
+3. 配好 GitHub 的两个 secret 后，Actions 每小时自动同步并部署，也可以在 `Actions` 里手动 `Run workflow` 立即发布。
+
+Notion 的图片会在同步时下载到本地，不依赖它一小时就过期的临时链接。标题和现有手写文章一致时，Notion 版本会覆盖手写版本并沿用原 URL。手写 Markdown 和 Notion 文章可以混用，首页、RSS、sitemap 会一起收录。
+
 ## 自定义站点
 
 - **标题 / 作者 / 简介**：改 `src/config.ts` 里的 `siteConfig`
@@ -70,16 +80,21 @@ draft: false
 
 ```text
 /
-├── public/               # 静态资源（favicon 等）
+├── public/               # 静态资源（favicon 等）；notion/ 是同步生成的图片
+├── scripts/
+│   └── sync-notion.mjs   # Notion → Markdown 同步脚本
 ├── src/
 │   ├── components/       # Header、Footer、主题切换、评论区等组件
 │   ├── content/
-│   │   ├── blog/         # 文章（Markdown）
-│   │   └── config.ts     # 内容集合 schema
+│   │   ├── blog/         # 手写文章（Markdown）
+│   │   └── notion/       # 从 Notion 同步的文章（生成，勿手改）
 │   ├── layouts/          # 页面布局
 │   ├── pages/            # 页面路由
 │   ├── config.ts         # 站点配置
+│   ├── content.config.ts # 内容集合 schema
 │   ├── styles/           # 全局样式与主题变量
+│   ├── types.ts          # 文章类型
 │   └── utils.ts          # 日期、阅读时长等工具函数
-└── astro.config.mjs      # Astro 配置
+├── astro.config.mjs      # Astro 配置
+└── NOTION.md             # Notion 同步配置说明
 ```

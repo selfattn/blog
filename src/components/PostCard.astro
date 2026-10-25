@@ -1,9 +1,9 @@
 ---
-import type { CollectionEntry } from 'astro:content';
 import { formatDate, readingTime } from '../utils';
+import type { PostEntry } from '../types';
 
 interface Props {
-  post: CollectionEntry<'blog'>;
+  post: PostEntry;
 }
 
 const { post } = Astro.props;

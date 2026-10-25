@@ -17,6 +17,11 @@ pnpm-debug.log*
 .env
 .env.production
 
+# Notion 同步产物（npm run sync 生成）
+src/content/notion/*.md
+!src/content/notion/.gitkeep
+public/notion/
+
 # macOS-specific files
 .DS_Store
 

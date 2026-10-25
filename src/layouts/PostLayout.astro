@@ -2,11 +2,11 @@
 import BaseLayout from './BaseLayout.astro';
 import Comment from '../components/Comment.astro';
 import { formatDate, readingTime } from '../utils';
-import type { CollectionEntry } from 'astro:content';
+import type { PostEntry } from '../types';
 import 'katex/dist/katex.min.css';
 
 interface Props {
-  post: CollectionEntry<'blog'>;
+  post: PostEntry;
 }
 
 const { post } = Astro.props;

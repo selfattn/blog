@@ -1,11 +1,9 @@
 import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
 import { siteConfig } from '../config';
+import { getPosts } from '../utils';
 
 export async function GET(context: { site: URL }) {
-  const posts = (await getCollection('blog'))
-    .filter((post) => !post.data.draft)
-    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  const posts = await getPosts();
   const base = import.meta.env.BASE_URL;
 
   return rss({

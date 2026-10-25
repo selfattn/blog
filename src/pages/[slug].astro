@@ -1,17 +1,21 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 import PostLayout from '../layouts/PostLayout.astro';
+import { getPosts } from '../utils';
+import type { PostEntry } from '../types';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const posts = await getPosts();
   return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },
   }));
 }
 
-const { post } = Astro.props;
-const { Content } = await render(post);
+const { post } = Astro.props as { post: PostEntry };
+// 两个集合共用同一套 schema，这里按 blog 的类型渲染即可
+const { Content } = await render(post as CollectionEntry<'blog'>);
 ---
 <PostLayout post={post}>
   <Content />
