@@ -5,15 +5,35 @@ import { siteConfig } from '../config';
 import { getPosts } from '../utils';
 
 const posts = await getPosts();
+const base = import.meta.env.BASE_URL;
+const latest = posts[0]?.data.pubDate;
+const updated = latest
+  ? latest.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit' })
+  : '';
 ---
 <BaseLayout title={siteConfig.title} description={siteConfig.description}>
   <section class="hero">
-    <h1>你好，我是 {siteConfig.author}</h1>
+    <p class="eyebrow">RL · Agents · Systems</p>
+    <h1>你好，我是<br /><em>{siteConfig.author}</em></h1>
+    <p class="hero-lede">
+      记录强化学习、Agent 系统与工程实践中的推导与踩坑。
+    </p>
+    <div class="hero-meta">
+      <span>{posts.length} 篇文章</span>
+      <span class="dot"></span>
+      {updated && <span>更新于 {updated}</span>}
+      {updated && <span class="dot"></span>}
+      <a href={`${base}rss.xml`}>RSS 订阅</a>
+    </div>
   </section>
+
   <section>
-    <h2 class="section-title">全部文章</h2>
+    <div class="section-head">
+      <h2>全部文章</h2>
+      <span>{String(posts.length).padStart(2, '0')}</span>
+    </div>
     <div class="post-list">
-      {posts.map((post) => <PostCard post={post} />)}
+      {posts.map((post, index) => <PostCard post={post} index={index} />)}
     </div>
     {posts.length === 0 && <p class="comments-hint">还没有文章，快写一篇吧。</p>}
   </section>

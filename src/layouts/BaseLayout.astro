@@ -21,6 +21,8 @@ const base = import.meta.env.BASE_URL;
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#f6f2ea" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c0d0f" media="(prefers-color-scheme: dark)" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -36,7 +38,14 @@ const base = import.meta.env.BASE_URL;
         } catch (e) {
           /* 忽略 */
         }
-        var dark = stored ? stored === 'dark' : true;
+        // 支持 ?theme=light / ?theme=dark，方便分享和截图
+        var forced = null;
+        try {
+          forced = new URLSearchParams(location.search).get('theme');
+        } catch (e) {
+          /* 忽略 */
+        }
+        var dark = forced ? forced === 'dark' : stored ? stored === 'dark' : true;
         var root = document.documentElement;
         if (dark) {
           root.classList.add('dark');

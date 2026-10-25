@@ -1,11 +1,20 @@
 ---
 import { siteConfig } from '../config';
+
+const base = import.meta.env.BASE_URL;
+const year = new Date().getFullYear();
 ---
 <footer class="site-footer">
   <div class="container">
-    <p>© {new Date().getFullYear()} {siteConfig.author}</p>
-    <p>
-      Powered by <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>
+    <p>© {year} {siteConfig.author}</p>
+    <p class="footer-links">
+      <a href={`${base}rss.xml`}>RSS</a>
+      <span class="dot" aria-hidden="true"></span>
+      <a href={`${base}about`}>关于</a>
+      <span class="dot" aria-hidden="true"></span>
+      <span>
+        Powered by <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>
+      </span>
     </p>
   </div>
 </footer>

@@ -3,52 +3,55 @@ import { siteConfig } from '../config';
 
 const { repo, repoId, category, categoryId, mapping } = siteConfig.giscus;
 const configured = repo !== 'yourname/your-repo' && repoId !== '' && categoryId !== '';
+// 没配置时线上不显示评论区，避免占位提示影响排版；本地开发仍给提示
+const showHint = !configured && import.meta.env.DEV;
 ---
-<section class="comments" id="comments">
-  <h2 class="comments-title">评论</h2>
-  {
-    configured ? (
-      <div
-        id="giscus"
-        data-repo={repo}
-        data-repo-id={repoId}
-        data-category={category}
-        data-category-id={categoryId}
-        data-mapping={mapping}
-      >
-        <script is:inline>
-          (function () {
-            var container = document.getElementById('giscus');
-            if (!container) return;
-            var s = document.createElement('script');
-            s.src = 'https://giscus.app/client.js';
-            s.async = true;
-            s.crossOrigin = 'anonymous';
-            s.setAttribute('data-repo', container.getAttribute('data-repo'));
-            s.setAttribute('data-repo-id', container.getAttribute('data-repo-id'));
-            s.setAttribute('data-category', container.getAttribute('data-category'));
-            s.setAttribute('data-category-id', container.getAttribute('data-category-id'));
-            s.setAttribute('data-mapping', container.getAttribute('data-mapping'));
-            s.setAttribute('data-strict', '0');
-            s.setAttribute('data-reactions-enabled', '1');
-            s.setAttribute('data-emit-metadata', '0');
-            s.setAttribute('data-input-position', 'bottom');
-            s.setAttribute(
-              'data-theme',
-              document.documentElement.classList.contains('dark') ? 'dark' : 'light',
-            );
-            s.setAttribute('data-lang', 'zh-CN');
-            s.setAttribute('data-loading', 'lazy');
-            container.appendChild(s);
-          })();
-        </script>
-      </div>
-    ) : (
-      <p class="comments-hint">
-        评论区尚未配置。请先在 <code>src/config.ts</code> 中填写 Giscus 的
-        <code>repo</code>、<code>repoId</code>、<code>categoryId</code>，配置步骤见
-        README 的「开启评论区」。
-      </p>
-    )
-  }
-</section>
+{
+  (configured || showHint) && (
+    <section class="comments" id="comments">
+      <h2 class="comments-title">评论</h2>
+      {configured ? (
+        <div
+          id="giscus"
+          data-repo={repo}
+          data-repo-id={repoId}
+          data-category={category}
+          data-category-id={categoryId}
+          data-mapping={mapping}
+        >
+          <script is:inline>
+            (function () {
+              var container = document.getElementById('giscus');
+              if (!container) return;
+              var s = document.createElement('script');
+              s.src = 'https://giscus.app/client.js';
+              s.async = true;
+              s.crossOrigin = 'anonymous';
+              s.setAttribute('data-repo', container.getAttribute('data-repo'));
+              s.setAttribute('data-repo-id', container.getAttribute('data-repo-id'));
+              s.setAttribute('data-category', container.getAttribute('data-category'));
+              s.setAttribute('data-category-id', container.getAttribute('data-category-id'));
+              s.setAttribute('data-mapping', container.getAttribute('data-mapping'));
+              s.setAttribute('data-strict', '0');
+              s.setAttribute('data-reactions-enabled', '1');
+              s.setAttribute('data-emit-metadata', '0');
+              s.setAttribute('data-input-position', 'bottom');
+              s.setAttribute(
+                'data-theme',
+                document.documentElement.classList.contains('dark') ? 'dark' : 'light',
+              );
+              s.setAttribute('data-lang', 'zh-CN');
+              s.setAttribute('data-loading', 'lazy');
+              container.appendChild(s);
+            })();
+          </script>
+        </div>
+      ) : (
+        <p class="comments-hint">
+          评论区尚未配置。请先在 <code>src/config.ts</code> 中填写 Giscus 的
+          <code>repo</code>、<code>repoId</code>、<code>categoryId</code>。
+        </p>
+      )}
+    </section>
+  )
+}

@@ -11,26 +11,60 @@ interface Props {
 
 const { post } = Astro.props;
 const { title, description, pubDate, tags } = post.data;
+const base = import.meta.env.BASE_URL;
+// Notion 文章的 description 是从正文自动截取的，再显示一遍会重复
+const showLede = Boolean(description) && !post.data.notionId;
 ---
 <BaseLayout title={title} description={description}>
+  <div class="reading-progress" aria-hidden="true">
+    <span id="reading-progress"></span>
+  </div>
+
   <article class="post">
+    <a class="back-link" href={base}>← 全部文章</a>
+
     <header class="post-header">
-      <h1>{title}</h1>
-      <div class="post-meta">
+      <div class="post-kicker">
         <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+        <span class="dot"></span>
         <span>{readingTime(post.body)}</span>
       </div>
-      {tags.length > 0 && (
-        <div class="post-tags">
-          {tags.map((tag) => (
-            <span class="tag">{tag}</span>
-          ))}
-        </div>
-      )}
+      <h1>{title}</h1>
+      {showLede && <p class="post-lede">{description}</p>}
+      {
+        tags.length > 0 && (
+          <div class="post-tags">
+            {tags.map((tag) => (
+              <span class="tag">{tag}</span>
+            ))}
+          </div>
+        )
+      }
     </header>
+
     <div class="prose">
       <slot />
     </div>
   </article>
+
   <Comment />
 </BaseLayout>
+
+<script is:inline>
+  (function () {
+    var bar = document.getElementById('reading-progress');
+    var article = document.querySelector('.prose');
+    if (!bar || !article) return;
+
+    function update() {
+      var start = article.offsetTop - 120;
+      var end = article.offsetTop + article.offsetHeight - window.innerHeight + 120;
+      var ratio = end > start ? (window.scrollY - start) / (end - start) : 0;
+      bar.style.width = Math.max(0, Math.min(1, ratio)) * 100 + '%';
+    }
+
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
+</script>
