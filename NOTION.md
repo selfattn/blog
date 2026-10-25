@@ -88,6 +88,7 @@ npm run dev              # 打开 http://localhost:4321/blog/
 
 细节：
 
+- **标签**：Notion 文章会自动继承根标签 `RL`，以及所有上级页面名（例如 `vanilla PG 到 PPO` 下面的页面会同时带 `RL` 和 `vanilla PG 到 PPO`）。手写文章用 frontmatter 的 `tags`。所有标签汇总在 `/tags/`，文章页的标签可以直接点。
 - **slug**：由标题生成，保留中英文，例如 `Harbor 框架` → `harbor-框架`。想换 URL 就在 Notion 里改标题，或同步后手动改 `src/content/notion/*.md`（下次同步会被覆盖）。
 - **日期**：新建页面用页面的创建时间；排序按这个日期。
 - **标签**：页面树没有 tags 属性，默认为空。需要标签就继续用手写 Markdown，或以后加一个同名映射。

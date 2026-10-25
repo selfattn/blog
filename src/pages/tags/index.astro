@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts } from '../../utils';
+import { collectTags } from '../../lib/tags';
+
+const posts = await getPosts();
+const tags = collectTags(posts);
+const base = import.meta.env.BASE_URL;
+---
+<BaseLayout title="标签" description="按主题浏览文章">
+  <section class="hero tags-hero">
+    <p class="eyebrow">Topics</p>
+    <h1>标签</h1>
+    <p class="hero-lede">按主题浏览文章，共 {tags.length} 个标签。</p>
+  </section>
+
+  {
+    tags.length > 0 ? (
+      <div class="tag-cloud">
+        {tags.map((item) => (
+          <a class="tag tag-lg" href={`${base}tags/${item.slug}/`}>
+            <span>{item.tag}</span>
+            <span class="tag-count">{item.count}</span>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <p class="comments-hint">还没有标签。在文章 frontmatter 的 tags 里加一个就行。</p>
+    )
+  }
+</BaseLayout>

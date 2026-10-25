@@ -2,6 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import Comment from '../components/Comment.astro';
 import { formatDate, readingTime } from '../utils';
+import { tagSlug } from '../lib/tags';
 import type { PostEntry } from '../types';
 import 'katex/dist/katex.min.css';
 
@@ -35,7 +36,9 @@ const showLede = Boolean(description) && !post.data.notionId;
         tags.length > 0 && (
           <div class="post-tags">
             {tags.map((tag) => (
-              <span class="tag">{tag}</span>
+              <a class="tag" href={`${base}tags/${tagSlug(tag)}/`}>
+                {tag}
+              </a>
             ))}
           </div>
         )

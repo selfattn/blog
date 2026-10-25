@@ -507,6 +507,50 @@ html.dark .icon-moon {
   border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
 }
 
+a.tag:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 4px 0 24px;
+}
+
+.tag-lg {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 15px;
+  font-size: 14px;
+}
+
+.tag-count {
+  color: var(--muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.tag-lg:hover .tag-count {
+  color: var(--accent);
+}
+
+.tags-hero {
+  padding-bottom: 36px;
+}
+
+.tag-hero {
+  padding-bottom: 34px;
+}
+
+.tag-hero .back-link {
+  display: inline-flex;
+  margin-top: 24px;
+}
+
 .post-read {
   display: inline-flex;
   align-items: center;

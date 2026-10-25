@@ -225,6 +225,8 @@ function quote(value) {
 function summarize(markdown) {
   const text = markdown
     .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/\$\$[\s\S]*?\$\$/g, ' ')
+    .replace(/\$[^$\n]+\$/g, ' ')
     .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
     .replace(/<[^>]+>/g, ' ')
@@ -562,8 +564,21 @@ async function readExistingPosts() {
   return posts;
 }
 
+/** 取页面标题，用来作为根标签。 */
+async function getPageTitle(pageId) {
+  try {
+    const page = await notion(`/pages/${pageId}`);
+    const titleProperty = Object.values(page.properties || {}).find(
+      (property) => property.type === 'title',
+    );
+    return propertyText(titleProperty).trim() || 'RL';
+  } catch {
+    return 'RL';
+  }
+}
+
 /** 递归取页面树里的子页面，按 Notion 里的顺序返回。 */
-async function getChildPages(rootPageId, depth = 0) {
+async function getChildPages(rootPageId, depth = 0, ancestors = []) {
   if (depth > 5) return [];
 
   const children = [];
@@ -577,16 +592,18 @@ async function getChildPages(rootPageId, depth = 0) {
     for (const block of data.results || []) {
       if (block.type !== 'child_page') continue;
 
-      const title = (block.child_page?.title || '').trim();
+      const title = (block.child_page?.title || '').replace(/\s+/g, ' ').trim();
       children.push({
         id: block.id,
         title,
         createdAt: block.created_time,
         updatedAt: block.last_edited_time,
         depth,
+        // 继承根页面和所有上级页面名作为标签
+        tags: [...ancestors],
       });
 
-      const nested = await getChildPages(block.id, depth + 1);
+      const nested = await getChildPages(block.id, depth + 1, [...ancestors, title]);
       children.push(...nested);
     }
 
@@ -605,12 +622,14 @@ function treeMetadata(entry, existingPosts) {
   const pubDate = existing?.pubDate || fallbackDate;
   if (Number.isNaN(pubDate.valueOf())) return null;
 
+  const tags = [...new Set([...(entry.tags || []), ...(existing?.tags || [])])];
+
   return {
     id: entry.id,
     title,
     description: existing?.description || '',
     pubDate,
-    tags: existing?.tags || [],
+    tags,
     // 同名文章沿用原来的 slug，保证已有链接不变
     slug: existing?.slug || toSlug(entry.title, entry.id),
     updated: entry.updatedAt ? new Date(entry.updatedAt) : undefined,
@@ -652,8 +671,9 @@ async function main() {
   let skippedDemo = 0;
 
   if (treeMode) {
-    const entries = await getChildPages(rootPageId);
-    console.log(`  读取 ${entries.length} 个页面（含嵌套子页面）`);
+    const rootTitle = await getPageTitle(rootPageId);
+    const entries = await getChildPages(rootPageId, 0, [rootTitle]);
+    console.log(`  读取 ${entries.length} 个页面（含嵌套子页面），根标签：${rootTitle}`);
 
     if (LIST_ONLY) {
       console.log('\n所有页面：');
