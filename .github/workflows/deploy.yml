@@ -4,9 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-  # 每小时同步一次 Notion，写完后最多等一小时自动上线
+  # 每 6 小时同步一次 Notion（GitHub 定时任务可能延迟）
   schedule:
-    - cron: '17 * * * *'
+    - cron: '17 */6 * * *'
 
 permissions:
   contents: read

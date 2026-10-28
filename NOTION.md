@@ -5,7 +5,7 @@
 ```text
 Notion 的 RL 页面
    └─ 子页面（= 一篇文章）
-        │  npm run sync（或 GitHub Actions 每小时跑一次）
+        │  npm run sync（或 GitHub Actions 每 6 小时跑一次）
         ▼
 src/content/notion/*.md  +  public/notion/*（图片）
         │  npm run build
@@ -103,7 +103,7 @@ npm run dev              # 打开 http://localhost:4321/blog/
 在 RL 下新建/编辑子页面 → 等下一次构建
 ```
 
-- **自动**：GitHub Actions 每小时的第 17 分钟跑一次（`cron: '17 * * * *'`），最多等一小时。
+- **自动**：GitHub Actions 名义上每 6 小时的第 17 分钟跑一次（`cron: '17 */6 * * *'`）；GitHub 会限流，实际可能更晚。
 - **立即**：仓库 `Actions` → `Deploy to GitHub Pages` → `Run workflow`。
 - 删除文章：删掉 Notion 子页面，或把它挪出 RL；下一次同步会整体重建 `src/content/notion/`，旧文章不会残留。
 - 移动文章：把它拖到 RL 下面即可，任意层级都会被发布。
