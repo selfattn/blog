@@ -1,7 +1,7 @@
 export const siteConfig = {
-  title: 'zhangjiancheng',
+  title: 'selfattn',
   description: '强化学习、Agent 系统与工程实践',
-  author: 'zhangjiancheng',
+  author: 'selfattn',
   lang: 'zh-CN',
   // Giscus 评论配置：需要自己填写，步骤见 README 的「开启评论区」
   giscus: {

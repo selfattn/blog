@@ -292,10 +292,10 @@ html.dark .icon-moon {
 .hero h1 {
   margin: 20px 0 22px;
   font-family: var(--font-serif);
-  font-size: clamp(42px, 6.2vw, 66px);
+  font-size: clamp(52px, 8vw, 82px);
   font-weight: 600;
-  line-height: 1.06;
-  letter-spacing: -0.015em;
+  line-height: 1;
+  letter-spacing: -0.02em;
 }
 
 .hero h1 em {
@@ -1069,7 +1069,7 @@ a.tag:hover {
   }
 
   .hero h1 {
-    font-size: clamp(34px, 9vw, 42px);
+    font-size: clamp(44px, 11vw, 54px);
   }
 
   .hero-lede {
