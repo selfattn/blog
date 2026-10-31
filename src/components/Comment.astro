@@ -2,7 +2,7 @@
 import { siteConfig } from '../config';
 
 const { repo, repoId, category, categoryId, mapping } = siteConfig.giscus;
-const configured = repo !== 'yourname/your-repo' && repoId !== '' && categoryId !== '';
+const configured = repoId.length > 0 && categoryId.length > 0 && !repo.startsWith('yourname/');
 // 没配置时线上不显示评论区，避免占位提示影响排版；本地开发仍给提示
 const showHint = !configured && import.meta.env.DEV;
 ---

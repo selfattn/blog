@@ -250,6 +250,31 @@ img {
   height: 16px;
 }
 
+.nav-search {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  transition: border-color 0.2s ease, color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.nav-search:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.nav-search svg {
+  width: 16px;
+  height: 16px;
+}
+
 .icon-sun {
   display: none;
 }
@@ -549,6 +574,38 @@ a.tag:hover {
 .tag-hero .back-link {
   display: inline-flex;
   margin-top: 24px;
+}
+
+/* ============================================================
+   搜索（Pagefind）
+   ============================================================ */
+.search-hero {
+  padding-bottom: 28px;
+}
+
+.search-box {
+  max-width: 760px;
+  margin-bottom: 48px;
+  --pagefind-ui-primary: var(--accent);
+  --pagefind-ui-text: var(--text);
+  --pagefind-ui-background: var(--card);
+  --pagefind-ui-border: var(--border);
+  --pagefind-ui-tag: var(--bg-soft);
+  --pagefind-ui-border-width: 1px;
+  --pagefind-ui-border-radius: 10px;
+  --pagefind-ui-font: var(--font-sans);
+}
+
+.search-box .pagefind-ui__search-input {
+  font-size: 16px;
+}
+
+.search-box .pagefind-ui__result-title {
+  font-family: var(--font-serif);
+}
+
+.search-box .pagefind-ui__footer {
+  display: none;
 }
 
 .post-read {

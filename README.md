@@ -49,20 +49,34 @@ Notion 的图片会在同步时下载到本地，不依赖它一小时就过期�
 - **首页欢迎语**：改 `src/pages/index.astro`
 - **关于页**：改 `src/pages/about.astro`
 
-## 开启评论区（Giscus）
+## 评论区（Giscus）
 
-评论区基于 [Giscus](https://giscus.app)，评论数据存在 GitHub Discussions 里，免费、无广告、无需自己搭服务器。配置一次即可：
+评论区基于 [Giscus](https://giscus.app)，评论数据存在 GitHub Discussions 里，免费、无广告、无需自己搭服务器。
 
-1. **创建一个公开的 GitHub 仓库**，用来存放博客代码（之后部署也会用到）。没有的话先注册 GitHub。
-2. 在该仓库的 **Settings → General** 里勾选 **Discussions** 启用它。
-3. 打开 [giscus.app](https://giscus.app)，按页面提示填入仓库地址，选择分类（一般选 `Announcements`）。
-4. 页面底部会生成一段配置代码，从里面复制这几个值：
-   - `data-repo` → 填到 `src/config.ts` 的 `giscus.repo`
-   - `data-repo-id` → `giscus.repoId`
-   - `data-category-id` → `giscus.categoryId`
-5. 保存后刷新页面，文章底部就会出现评论区。
+仓库 `selfattn/blog` 已经启用 Discussions，`src/config.ts` 里也填好了 `repo` / `repoId` / `categoryId`。只剩一步：
 
-> 不配置的话，评论区会显示一行提示，不影响其他功能。
+1. 打开 <https://github.com/apps/giscus/installations/new>；
+2. 选择 `selfattn/blog` 仓库安装；
+3. 刷新文章页，底部就会出现评论区。
+
+评论会写进仓库的 **Discussions → Announcements** 分类，按页面路径映射，同一篇文章对应同一个讨论。
+
+## 搜索（Pagefind）
+
+搜索用 [Pagefind](https://pagefind.app)，纯静态、构建时生成索引，不需要额外服务：
+
+- 页面：`/search/`，页头有放大镜入口；
+- 索引在 `npm run build` 时自动生成到 `dist/pagefind/`；
+- 只索引文章正文（`<main data-pagefind-body>`），标签页和搜索页不参与；
+- 中文没有 stemming，但关键词搜索正常；结果 URL 会自动带 `/blog/` 前缀。
+
+本地验证：
+
+```sh
+npm run build
+npm run preview
+# 打开 http://localhost:4321/blog/search/
+```
 
 ## 部署（GitHub Pages）
 

@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const pagefindPath = `${import.meta.env.BASE_URL}pagefind/`;
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<BaseLayout title="搜索" description="搜索文章">
+  <div data-pagefind-ignore>
+    <section class="hero search-hero">
+      <p class="eyebrow">Search</p>
+      <h1>搜索</h1>
+      <p class="hero-lede">输入关键词，搜索标题和正文。</p>
+    </section>
+
+    <div id="search" class="search-box"></div>
+  </div>
+</BaseLayout>
+
+<script is:inline define:vars={{ pagefindPath, basePath }}>
+  (function () {
+    function withBase(result) {
+      function fix(item) {
+        if (
+          item.url &&
+          !/^https?:/i.test(item.url) &&
+          !item.url.startsWith(basePath + '/')
+        ) {
+          item.url = basePath + item.url;
+        }
+        if (item.sub_results) item.sub_results.forEach(fix);
+      }
+      fix(result);
+      return result;
+    }
+
+    function boot() {
+      var style = document.createElement('link');
+      style.rel = 'stylesheet';
+      style.href = pagefindPath + 'pagefind-ui.css';
+      document.head.appendChild(style);
+
+      var script = document.createElement('script');
+      script.src = pagefindPath + 'pagefind-ui.js';
+      script.onload = function () {
+        new PagefindUI({
+          element: '#search',
+          showSubResults: true,
+          bundlePath: pagefindPath,
+          processResult: withBase,
+        });
+      };
+      document.head.appendChild(script);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', boot);
+    } else {
+      boot();
+    }
+  })();
+</script>
