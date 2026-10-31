@@ -52,8 +52,10 @@
     // 让 Giscus 评论区跟随主题切换
     const frame = giscusFrame();
     if (frame) {
+      const base = document.documentElement.dataset.base || '/';
+      const theme = `${location.origin}${base}giscus-theme-${dark ? 'dark' : 'light'}.css`;
       frame.contentWindow?.postMessage(
-        { giscus: { setConfig: { theme: dark ? 'dark' : 'light' } } },
+        { giscus: { setConfig: { theme } } },
         'https://giscus.app',
       );
     }

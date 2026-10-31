@@ -1,0 +1,130 @@
+/* Giscus 浅色主题：暖纸 + 陶土色，跟随站点的 --bg / --accent */
+main {
+  --color-prettylights-syntax-comment: #8a8478;
+  --color-prettylights-syntax-constant: #9a6a1f;
+  --color-prettylights-syntax-entity: #8a4f74;
+  --color-prettylights-syntax-storage-modifier-import: #1b1a17;
+  --color-prettylights-syntax-entity-tag: #3f7a52;
+  --color-prettylights-syntax-keyword: #b3542e;
+  --color-prettylights-syntax-string: #3f7a52;
+  --color-prettylights-syntax-variable: #9a6a1f;
+  --color-prettylights-syntax-brackethighlighter-unmatched: #b3261e;
+  --color-prettylights-syntax-invalid-illegal-text: #5a1a16;
+  --color-prettylights-syntax-invalid-illegal-bg: #f7d9d5;
+  --color-prettylights-syntax-carriage-return-text: #1b1a17;
+  --color-prettylights-syntax-carriage-return-bg: #f2c9c4;
+  --color-prettylights-syntax-string-regexp: #3f7a52;
+  --color-prettylights-syntax-markup-list: #9a6a1f;
+  --color-prettylights-syntax-markup-heading: #4463d9;
+  --color-prettylights-syntax-markup-italic: #1b1a17;
+  --color-prettylights-syntax-markup-bold: #1b1a17;
+  --color-prettylights-syntax-markup-deleted-text: #5a1a16;
+  --color-prettylights-syntax-markup-deleted-bg: #f7d9d5;
+  --color-prettylights-syntax-markup-inserted-text: #1e4a2c;
+  --color-prettylights-syntax-markup-inserted-bg: #d9ecdd;
+  --color-prettylights-syntax-markup-changed-text: #5a3d10;
+  --color-prettylights-syntax-markup-changed-bg: #f5e5c4;
+  --color-prettylights-syntax-markup-ignored-text: #1b1a17;
+  --color-prettylights-syntax-markup-ignored-bg: #dbe3f5;
+  --color-prettylights-syntax-meta-diff-range: #8a4f74;
+  --color-prettylights-syntax-brackethighlighter-angle: #8a8478;
+  --color-prettylights-syntax-sublimelinter-gutter-mark: #b5ae9f;
+  --color-prettylights-syntax-constant-other-reference-link: #4463d9;
+
+  --color-btn-text: #1b1a17;
+  --color-btn-bg: #fffdf8;
+  --color-btn-border: #e2dccf;
+  --color-btn-shadow: 0 1px 2px rgba(27, 26, 23, 0.04);
+  --color-btn-inset-shadow: 0 0 transparent;
+  --color-btn-hover-bg: #f3ede2;
+  --color-btn-hover-border: #cfc7b7;
+  --color-btn-active-bg: #ece5d8;
+  --color-btn-active-border: #bfb7a7;
+  --color-btn-selected-bg: #f3ede2;
+  --color-btn-primary-text: #fff6ec;
+  --color-btn-primary-bg: #b3542e;
+  --color-btn-primary-border: #9a4527;
+  --color-btn-primary-shadow: 0 1px 2px rgba(27, 26, 23, 0.08);
+  --color-btn-primary-inset-shadow: 0 0 transparent;
+  --color-btn-primary-hover-bg: #c9653f;
+  --color-btn-primary-hover-border: #9a4527;
+  --color-btn-primary-selected-bg: #9a4527;
+  --color-btn-primary-selected-shadow: 0 0 transparent;
+  --color-btn-primary-disabled-text: rgba(255, 246, 236, 0.7);
+  --color-btn-primary-disabled-bg: rgba(179, 84, 46, 0.5);
+  --color-btn-primary-disabled-border: rgba(154, 69, 39, 0.4);
+
+  --color-action-list-item-default-hover-bg: rgba(27, 26, 23, 0.05);
+  --color-segmented-control-bg: rgba(27, 26, 23, 0.05);
+  --color-segmented-control-button-bg: #fffdf8;
+  --color-segmented-control-button-selected-border: #cfc7b7;
+
+  --color-fg-default: #1b1a17;
+  --color-fg-muted: #6f6a60;
+  --color-fg-subtle: #8a8478;
+  --color-canvas-default: #fffdf8;
+  --color-canvas-overlay: #fffdf8;
+  --color-canvas-inset: #f6f2ea;
+  --color-canvas-subtle: #efe9dd;
+  --color-border-default: #e2dccf;
+  --color-border-muted: #ece6da;
+  --color-neutral-muted: rgba(27, 26, 23, 0.08);
+
+  --color-accent-fg: #b3542e;
+  --color-accent-emphasis: #9a4527;
+  --color-accent-muted: rgba(179, 84, 46, 0.35);
+  --color-accent-subtle: rgba(179, 84, 46, 0.1);
+
+  --color-success-fg: #3f7a52;
+  --color-attention-fg: #9a6a1f;
+  --color-attention-muted: rgba(154, 106, 31, 0.35);
+  --color-attention-subtle: rgba(154, 106, 31, 0.12);
+  --color-danger-fg: #b3261e;
+  --color-danger-muted: rgba(179, 38, 30, 0.35);
+  --color-danger-subtle: rgba(179, 38, 30, 0.08);
+
+  --color-primer-shadow-inset: 0 0 transparent;
+  --color-scale-gray-7: #efe9dd;
+  --color-scale-blue-8: #f0d9cc;
+  --color-social-reaction-bg-hover: var(--color-scale-gray-7);
+  --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-8);
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+}
+
+main .gsc-comment-box,
+main .gsc-comment,
+main .gsc-reply-box {
+  border-radius: 12px;
+}
+
+main .gsc-header {
+  padding-bottom: 0.75rem;
+}
+
+main .gsc-comment-box {
+  border-color: var(--color-border-default);
+  background: var(--color-canvas-subtle);
+}
+
+main .gsc-comment-box-tabs {
+  border-color: var(--color-border-muted);
+}
+
+main .gsc-comments > .gsc-header {
+  order: 1;
+}
+
+main .gsc-comments > .gsc-comment-box {
+  order: 2;
+  margin-bottom: 1rem;
+}
+
+main .gsc-comments > .gsc-timeline {
+  order: 3;
+}
+
+main .gsc-homepage-bg {
+  background-color: #fffdf8;
+}
