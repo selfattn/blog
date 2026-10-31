@@ -370,6 +370,101 @@ html.dark .icon-moon {
 /* ============================================================
    文章列表
    ============================================================ */
+.reading-path {
+  margin-bottom: 64px;
+}
+
+.path-stages {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.path-stage {
+  display: flex;
+  gap: 14px;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--card);
+}
+
+.path-number {
+  color: var(--accent);
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-style: italic;
+}
+
+.path-stage h3 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.path-stage p {
+  margin: 8px 0 14px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.path-stage ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.path-stage a {
+  color: var(--text);
+}
+
+.path-stage a:hover {
+  color: var(--accent);
+}
+
+.path-stage a span {
+  color: var(--accent);
+}
+
+.path-navigation {
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.path-navigation p {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.path-navigation div {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 20px;
+}
+
+.path-navigation a {
+  color: var(--text);
+  font-size: 14px;
+}
+
+.path-navigation a span {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--accent);
+  font-size: 12px;
+}
+
 .section-head {
   display: flex;
   align-items: baseline;
@@ -1096,6 +1191,11 @@ a.tag:hover {
    响应式
    ============================================================ */
 @media (max-width: 900px) {
+  .path-stages {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
   .post-list {
     grid-template-columns: 1fr;
   }

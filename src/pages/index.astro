@@ -3,8 +3,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import { siteConfig } from '../config';
 import { getPosts } from '../utils';
+import { getReadingPath } from '../lib/reading-path';
 
 const posts = await getPosts();
+const readingPath = getReadingPath(posts);
 const base = import.meta.env.BASE_URL;
 const latest = posts[0]?.data.pubDate;
 const updated = latest
@@ -26,6 +28,25 @@ const updated = latest
       <a href={`${base}rss.xml`}>RSS 订阅</a>
     </div>
   </section>
+
+  {readingPath.length > 0 && <section class="reading-path" aria-labelledby="reading-path-title">
+    <div class="section-head">
+      <h2 id="reading-path-title">从这里开始</h2>
+      <span>强化学习阅读路径</span>
+    </div>
+    <ol class="path-stages">
+      {readingPath.map((stage, index) => <li class="path-stage">
+        <span class="path-number">{String(index + 1).padStart(2, '0')}</span>
+        <div>
+          <h3>{stage.title}</h3>
+          <p>{stage.description}</p>
+          <ul>
+            {stage.posts.map((post) => <li><a href={`${base}${post.id}/`}>{post.data.title} <span aria-hidden="true">↗</span></a></li>)}
+          </ul>
+        </div>
+      </li>)}
+    </ol>
+  </section>}
 
   <section>
     <div class="section-head">
