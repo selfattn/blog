@@ -1,7 +1,7 @@
 export const siteConfig = {
-  title: 'selfattn',
+  title: '从直觉到公式',
   description: '强化学习、Agent 系统与工程实践',
-  author: 'selfattn',
+  author: 'zhangjiancheng',
   lang: 'zh-CN',
   // Giscus 评论配置：仓库必须是公开的，并已安装 giscus app、启用 Discussions
   giscus: {
