@@ -178,7 +178,7 @@ img {
   background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #6a7f74));
   color: var(--accent-contrast);
   font-family: var(--font-serif);
-  font-size: 15px;
+  font-size: 18px;
   line-height: 1;
   box-shadow: 0 4px 12px var(--accent-soft);
 }
@@ -368,7 +368,7 @@ html.dark .icon-moon {
 }
 
 /* ============================================================
-   文章列表
+   阅读路径
    ============================================================ */
 .reading-path {
   margin-bottom: 64px;
@@ -376,63 +376,120 @@ html.dark .icon-moon {
 
 .path-stages {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
+  gap: 0;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .path-stage {
-  display: flex;
-  gap: 14px;
-  padding: 22px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: var(--card);
+  position: relative;
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 22px;
+  padding: 0 0 36px;
+}
+
+.path-stage::before {
+  content: '';
+  position: absolute;
+  left: 25px;
+  top: 52px;
+  bottom: 0;
+  width: 1px;
+  background: var(--border);
+}
+
+.path-stage:last-child {
+  padding-bottom: 0;
+}
+
+.path-stage:last-child::before {
+  display: none;
 }
 
 .path-number {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
   color: var(--accent);
   font-family: var(--font-serif);
-  font-size: 14px;
+  font-size: 15px;
   font-style: italic;
+}
+
+.path-stage-body {
+  min-width: 0;
+  padding-top: 10px;
+}
+
+.path-stage-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
 }
 
 .path-stage h3 {
   margin: 0;
   font-family: var(--font-serif);
-  font-size: 18px;
-  line-height: 1.4;
+  font-size: 22px;
+  line-height: 1.35;
+}
+
+.path-count {
+  color: var(--muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
 }
 
 .path-stage p {
-  margin: 8px 0 14px;
+  max-width: 620px;
+  margin: 8px 0 0;
   color: var(--muted);
-  font-size: 13px;
-  line-height: 1.6;
+  font-size: 14px;
+  line-height: 1.7;
 }
 
 .path-stage ul {
   display: grid;
-  gap: 8px;
-  margin: 0;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0 30px;
+  margin: 16px 0 0;
   padding: 0;
   list-style: none;
-  font-size: 13px;
-  line-height: 1.55;
+}
+
+.path-stage li {
+  border-bottom: 1px dashed var(--border);
 }
 
 .path-stage a {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 0;
   color: var(--text);
+  font-size: 14px;
+  line-height: 1.55;
+  transition: color 0.2s ease;
 }
 
 .path-stage a:hover {
   color: var(--accent);
+  text-decoration: none;
 }
 
 .path-stage a span {
+  flex: none;
   color: var(--accent);
+  font-size: 12px;
 }
 
 .path-navigation {
@@ -1191,9 +1248,34 @@ a.tag:hover {
    响应式
    ============================================================ */
 @media (max-width: 900px) {
-  .path-stages {
+  .path-stage {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 16px;
+    padding-bottom: 28px;
+  }
+
+  .path-stage::before {
+    left: 19px;
+    top: 40px;
+  }
+
+  .path-number {
+    width: 40px;
+    height: 40px;
+    font-size: 13px;
+  }
+
+  .path-stage-body {
+    padding-top: 5px;
+  }
+
+  .path-stage h3 {
+    font-size: 19px;
+  }
+
+  .path-stage ul {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 0;
   }
 
   .post-list {

@@ -7,6 +7,7 @@ import { getReadingPath } from '../lib/reading-path';
 
 const posts = await getPosts();
 const readingPath = getReadingPath(posts);
+const pathCount = readingPath.reduce((total, stage) => total + stage.posts.length, 0);
 const base = import.meta.env.BASE_URL;
 const latest = posts[0]?.data.pubDate;
 const updated = latest
@@ -29,24 +30,38 @@ const updated = latest
     </div>
   </section>
 
-  {readingPath.length > 0 && <section class="reading-path" aria-labelledby="reading-path-title">
-    <div class="section-head">
-      <h2 id="reading-path-title">从这里开始</h2>
-      <span>强化学习阅读路径</span>
-    </div>
-    <ol class="path-stages">
-      {readingPath.map((stage, index) => <li class="path-stage">
-        <span class="path-number">{String(index + 1).padStart(2, '0')}</span>
-        <div>
-          <h3>{stage.title}</h3>
-          <p>{stage.description}</p>
-          <ul>
-            {stage.posts.map((post) => <li><a href={`${base}${post.id}/`}>{post.data.title} <span aria-hidden="true">↗</span></a></li>)}
-          </ul>
-        </div>
-      </li>)}
-    </ol>
-  </section>}
+  {readingPath.length > 0 && (
+    <section class="reading-path" aria-labelledby="reading-path-title">
+      <div class="section-head">
+        <h2 id="reading-path-title">从这里开始</h2>
+        <span>{readingPath.length} 个阶段 · {pathCount} 篇</span>
+      </div>
+      <ol class="path-stages">
+        {readingPath.map((stage, index) => (
+          <li class="path-stage">
+            <span class="path-number">{String(index + 1).padStart(2, '0')}</span>
+            <div class="path-stage-body">
+              <div class="path-stage-head">
+                <h3>{stage.title}</h3>
+                <span class="path-count">{stage.posts.length} 篇</span>
+              </div>
+              <p>{stage.description}</p>
+              <ul>
+                {stage.posts.map((post) => (
+                  <li>
+                    <a href={`${base}${post.id}/`}>
+                      {post.data.title}
+                      <span aria-hidden="true">↗</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+  )}
 
   <section>
     <div class="section-head">

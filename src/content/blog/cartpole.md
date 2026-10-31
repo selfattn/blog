@@ -3,6 +3,8 @@ title: '同一根杆子，两条路线——CartPole 里的 DQN 与 PPO'
 description: '在 CartPole 里对比 DQN 与 PPO：状态连续装不进表格，两条完全不同的路线让杆子不倒。'
 pubDate: 2026-07-15
 tags: ['RL', 'DQN', 'PPO']
+pathStage: 'experiments'
+pathOrder: 3
 ---
 
 ## 场景

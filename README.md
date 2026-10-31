@@ -30,6 +30,7 @@ draft: false
 - `draft: true` 的文章不会出现在站点上
 - `pubDate` 决定列表排序，写当天日期即可
 - 代码块会自动语法高亮
+- 可选：`pathStage` + `pathOrder` 把文章加入首页「阅读路径」，阶段 id 在 `src/lib/reading-path.ts` 里定义（`basics` / `experiments` / `policy`）
 
 ## 用 Notion 写文章（可选）
 

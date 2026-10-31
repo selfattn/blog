@@ -11,6 +11,9 @@ const postSchema = z.object({
   draft: z.boolean().default(false),
   // 仅 Notion 同步的文章会带这个字段，方便识别与排查
   notionId: z.string().optional(),
+  // 阅读路径：阶段 id + 阶段内顺序（可选）
+  pathStage: z.string().optional(),
+  pathOrder: z.number().optional(),
 });
 
 const blog = defineCollection({

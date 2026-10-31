@@ -3,6 +3,8 @@ title: '三个实验：悬崖、冰面与倒立摆，不用背公式的 RL 入�
 description: '从直觉出发的强化学习入门：三个经典实验对应三个核心问题，不需要背公式。'
 pubDate: 2026-07-15
 tags: ['RL', '强化学习', '入门']
+pathStage: 'basics'
+pathOrder: 1
 ---
 
 我研究生第一次上 RL 课，是从 Bellman 方程和 UCB 开始看的。

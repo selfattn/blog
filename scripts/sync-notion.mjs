@@ -34,6 +34,15 @@ const PUBLISHED = new Set(['published', 'publish', '已发布', '发布']);
 const TEMPLATE_DEMO_SLUG = /^(?:example-\d+|guide)$/i;
 // 只在排查问题时用：NOTION_INCLUDE_DEMOS=1 会连模板示例一起同步
 const INCLUDE_DEMOS = process.env.NOTION_INCLUDE_DEMOS === '1';
+// 阅读路径：Notion 页面 ID -> 阶段/顺序。用页面 ID 而不是 slug，改标题也不会断。
+const PATH_BY_PAGE_ID = {
+  '3b7ac9a9-f88b-807e-b4bf-d891d0e55c35': { stage: 'policy', order: 1 }, // Policy Gradient
+  '403ac9a9-f88b-80e5-888a-de325db930a2': { stage: 'policy', order: 2 }, // 策略梯度推导
+  '3e0ac9a9-f88b-80ef-845c-c7615704c749': { stage: 'policy', order: 3 }, // 降低 Reinforce 方差
+  '3e1ac9a9-f88b-806f-9bcf-de3e1af1ce80': { stage: 'policy', order: 4 }, // Actor-Critic
+  '404ac9a9-f88b-80ff-8c4d-d400b5ff5367': { stage: 'policy', order: 5 }, // N-step TD 与 GAE
+  '3cbac9a9-f88b-80ca-9370-d123f8e16a7d': { stage: 'policy', order: 6 }, // vanilla PG 到 PPO
+};
 // 只列清单、不写文件：npm run sync -- --list
 const LIST_ONLY = process.argv.includes('--list');
 
@@ -552,12 +561,15 @@ async function readExistingPosts() {
     const tagsSource = /^tags:\s*\[(.*)\]\s*$/m.exec(frontmatter[1])?.[1] || '';
     const tags = [...tagsSource.matchAll(/['"]([^'"]+)['"]/g)].map((match) => match[1]);
     const pubDate = new Date(read('pubDate'));
+    const pathOrderRaw = read('pathOrder');
 
     posts.set(normalizeTitle(title), {
       slug: path.basename(file, '.md'),
       description: read('description'),
       pubDate: Number.isNaN(pubDate.valueOf()) ? undefined : pubDate,
       tags,
+      pathStage: read('pathStage') || undefined,
+      pathOrder: pathOrderRaw ? Number(pathOrderRaw) : undefined,
     });
   }
 
@@ -623,6 +635,7 @@ function treeMetadata(entry, existingPosts) {
   if (Number.isNaN(pubDate.valueOf())) return null;
 
   const tags = [...new Set([...(entry.tags || []), ...(existing?.tags || [])])];
+  const pathEntry = PATH_BY_PAGE_ID[entry.id];
 
   return {
     id: entry.id,
@@ -635,6 +648,8 @@ function treeMetadata(entry, existingPosts) {
     updated: entry.updatedAt ? new Date(entry.updatedAt) : undefined,
     hasPassword: false,
     matchedExisting: Boolean(existing),
+    pathStage: pathEntry?.stage || existing?.pathStage,
+    pathOrder: pathEntry?.order ?? existing?.pathOrder,
   };
 }
 
@@ -813,6 +828,8 @@ async function main() {
       `pubDate: ${meta.pubDate.toISOString()}`,
       meta.updated ? `updated: ${meta.updated.toISOString()}` : null,
       `tags: [${meta.tags.map(quote).join(', ')}]`,
+      meta.pathStage ? `pathStage: ${quote(meta.pathStage)}` : null,
+      meta.pathOrder !== undefined ? `pathOrder: ${meta.pathOrder}` : null,
       `notionId: ${quote(meta.id)}`,
       '---',
       '',

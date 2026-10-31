@@ -1,10 +1,9 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import Comment from '../components/Comment.astro';
-import { formatDate, readingTime } from '../utils';
+import { formatDate, readingTime, getPosts } from '../utils';
 import { tagSlug } from '../lib/tags';
 import type { PostEntry } from '../types';
-import { getPosts } from '../utils';
 import { getReadingPath } from '../lib/reading-path';
 import 'katex/dist/katex.min.css';
 

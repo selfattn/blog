@@ -89,9 +89,9 @@ npm run dev              # 打开 http://localhost:4321/blog/
 细节：
 
 - **标签**：Notion 文章会自动继承根标签 `RL`，以及所有上级页面名（例如 `vanilla PG 到 PPO` 下面的页面会同时带 `RL` 和 `vanilla PG 到 PPO`）。手写文章用 frontmatter 的 `tags`。所有标签汇总在 `/tags/`，文章页的标签可以直接点。
+- **阅读路径**：Notion 文章的阶段和顺序在 `scripts/sync-notion.mjs` 的 `PATH_BY_PAGE_ID` 里按页面 ID 配置，改标题不会断；同步时会写进生成的 frontmatter，首页时间线和文章底部的前后篇自动读取。
 - **slug**：由标题生成，保留中英文，例如 `Harbor 框架` → `harbor-框架`。想换 URL 就在 Notion 里改标题，或同步后手动改 `src/content/notion/*.md`（下次同步会被覆盖）。
 - **日期**：新建页面用页面的创建时间；排序按这个日期。
-- **标签**：页面树没有 tags 属性，默认为空。需要标签就继续用手写 Markdown，或以后加一个同名映射。
 - **同名覆盖**：如果 Notion 子页面标题和 `src/content/blog/` 里的手写文章一致（忽略空格、标点、大小写），会用 Notion 版本覆盖，并沿用原文章的 slug、日期、标签、摘要。这样改 Notion 就能更新已有文章，URL 不变。
 - **改标题 = 新文章**：把已有文章改名后，它就不再匹配旧文，会以新 slug 重新发布，旧文章仍留在博客里。
 

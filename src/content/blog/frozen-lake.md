@@ -3,6 +3,8 @@ title: '同一片冰面，两种算法——Frozen Lake 里的 Value Iteration �
 description: '在 Frozen Lake 里对比 Value Iteration 与 Policy Iteration：一个 23 轮一步到位，一个 183 轮反复评估，却收敛到同一个最优策略。'
 pubDate: 2026-07-15
 tags: ['RL', '动态规划', 'Value Iteration', 'Policy Iteration']
+pathStage: 'experiments'
+pathOrder: 2
 ---
 
 ## 场景

@@ -3,6 +3,8 @@ title: '同一座悬崖，两种走法——Q-Learning 与 SARSA'
 description: '在 Cliff Walking 里对比 Q-Learning 与 SARSA：唯一的区别在一行 max，却决定了贴悬崖抄近路还是绕远路保安全。'
 pubDate: 2026-07-15
 tags: ['RL', 'Q-Learning', 'SARSA']
+pathStage: 'experiments'
+pathOrder: 1
 ---
 
 ## 场景
