@@ -313,6 +313,34 @@ function separateBlocks(text) {
 }
 
 /**
+ * Notion 导出的 Markdown 在“加粗/斜体跨行内公式”时会把 ** 和 $...$ 交错，
+ * 例如 **旧策略的状态分布 **$d_\pi$** 来近似**，浏览器不会把它当强调。
+ * 这里把紧贴 $...$ 的强调标记挪到公式外侧，修成合法 Markdown。
+ */
+function repairEmphasisAroundMath(markdown) {
+  let output = markdown;
+
+  for (let i = 0; i < 4; i += 1) {
+    const before = output;
+    output = output
+      .replace(/\*\*([^*\n]+?)\s*\*\*(?=\$)/g, (_, text) => `**${text.trim()}** `)
+      .replace(
+        /(\$[^$\n]+\$)\*\*\s*([^*\n]+?)\*\*/g,
+        (_, math, text) => `${math} **${text.trim()}**`,
+      )
+      .replace(/(?<!\*)\*([^*\n]+?)\s*\*(?=\$)/g, (_, text) => `*${text.trim()}* `)
+      .replace(
+        /(\$[^$\n]+\$)\*\s*([^*\n]+?)\*(?!\*)/g,
+        (_, math, text) => `${math} *${text.trim()}*`,
+      );
+
+    if (output === before) break;
+  }
+
+  return output;
+}
+
+/**
  * Notion 的 Markdown 会输出一些自定义标签：
  * - <synced_block>：同步块，内部 Markdown 被多缩进一层，直接渲染会变成代码块
  * - <callout>：高亮块，浏览器不认识，会丢掉图标和底色
@@ -393,6 +421,7 @@ function normalizeMarkdown(markdown) {
     .replace(/<embed\b[^>]*\/?>/g, '（嵌入内容）')
     .replace(/<span\s+color="[^"]*">/g, '<span>');
 
+  output = repairEmphasisAroundMath(output);
   output = sanitizeMath(output);
 
   return separateBlocks(output).trim();
