@@ -42,6 +42,12 @@ const PATH_BY_PAGE_ID = {
   '3e1ac9a9-f88b-806f-9bcf-de3e1af1ce80': { stage: 'policy', order: 4 }, // Actor-Critic
   '404ac9a9-f88b-80ff-8c4d-d400b5ff5367': { stage: 'policy', order: 5 }, // N-step TD 与 GAE
   '3cbac9a9-f88b-80ca-9370-d123f8e16a7d': { stage: 'policy', order: 6 }, // vanilla PG 到 PPO
+  '40bac9a9-f88b-807c-a46a-e8af776a6194': { stage: 'policy', order: 7 }, // TRPO
+};
+// 分享卡片/SEO 用的手写摘要；没配就退回自动截取
+const DESCRIPTION_BY_PAGE_ID = {
+  '40bac9a9-f88b-807c-a46a-e8af776a6194':
+    '从策略差与状态分布出发，推导 TRPO 的代理目标与单调改进下界，并用 Fisher 矩阵、CG/FVP 与线搜索把它落到工程实现。',
 };
 // 只列清单、不写文件：npm run sync -- --list
 const LIST_ONLY = process.argv.includes('--list');
@@ -669,7 +675,7 @@ function treeMetadata(entry, existingPosts) {
   return {
     id: entry.id,
     title,
-    description: existing?.description || '',
+    description: DESCRIPTION_BY_PAGE_ID[entry.id] || existing?.description || '',
     pubDate,
     tags,
     // 同名文章沿用原来的 slug，保证已有链接不变
