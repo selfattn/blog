@@ -1064,6 +1064,7 @@ a.tag:hover {
 /* KaTeX */
 .prose .katex {
   font-size: 1.04em;
+  white-space: nowrap;
 }
 
 /* 公式里的中文用正文字体，避免 KaTeX 字体缺字或基线错位 */
