@@ -43,11 +43,14 @@ const PATH_BY_PAGE_ID = {
   '404ac9a9-f88b-80ff-8c4d-d400b5ff5367': { stage: 'policy', order: 5 }, // N-step TD 与 GAE
   '3cbac9a9-f88b-80ca-9370-d123f8e16a7d': { stage: 'policy', order: 6 }, // vanilla PG 到 PPO
   '40bac9a9-f88b-807c-a46a-e8af776a6194': { stage: 'policy', order: 7 }, // TRPO
+  '415ac9a9-f88b-8037-8fc7-f2899ee94897': { stage: 'policy', order: 8 }, // PPO
 };
 // 分享卡片/SEO 用的手写摘要；没配就退回自动截取
 const DESCRIPTION_BY_PAGE_ID = {
   '40bac9a9-f88b-807c-a46a-e8af776a6194':
     '从策略差与状态分布出发，推导 TRPO 的代理目标与单调改进下界，并用 Fisher 矩阵、CG/FVP 与线搜索把它落到工程实现。',
+  '415ac9a9-f88b-8037-8fc7-f2899ee94897':
+    '从 TRPO 的 KL 约束讲到 PPO 的 clip 目标，逐项分析优势正负与重要性采样比率的四种情况，并推导策略梯度。',
 };
 // 只列清单、不写文件：npm run sync -- --list
 const LIST_ONLY = process.argv.includes('--list');
