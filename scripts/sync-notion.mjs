@@ -50,7 +50,7 @@ const DESCRIPTION_BY_PAGE_ID = {
   '40bac9a9-f88b-807c-a46a-e8af776a6194':
     '从策略差与状态分布出发，推导 TRPO 的代理目标与单调改进下界，并用 Fisher 矩阵、CG/FVP 与线搜索把它落到工程实现。',
   '415ac9a9-f88b-8037-8fc7-f2899ee94897':
-    '从 TRPO 的 KL 约束讲到 PPO 的 clip 目标，逐项分析优势正负与重要性采样比率的四种情况，并推导策略梯度。',
+    '从 TRPO 的 KL 约束讲到 PPO 的 clip 目标，补全 GAE、KL 惩罚、value loss、entropy bonus 与多样本复用的工程细节。',
 };
 // 只列清单、不写文件：npm run sync -- --list
 const LIST_ONLY = process.argv.includes('--list');
