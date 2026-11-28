@@ -53,6 +53,8 @@ const DESCRIPTION_BY_PAGE_ID = {
     '从 TRPO 的 KL 约束讲到 PPO 的 clip 目标，补全 GAE、KL 惩罚、value loss、entropy bonus 与多样本复用的工程细节。',
   '41fac9a9-f88b-808d-aedf-f8d7eef69872':
     '从 policy 的定义讲到确定性策略与随机策略，拆开 categorical 和 diagonal Gaussian 的采样、log-likelihood 与代码实现。',
+  '421ac9a9-f88b-80ac-abeb-e46ef2020e9a':
+    '从 Q-learning 的最优 Q 与 Bellman target 讲到 DQN：replay buffer、target network、epsilon-greedy 探索，以及完整 loss。',
 };
 // 只列清单、不写文件：npm run sync -- --list
 const LIST_ONLY = process.argv.includes('--list');
